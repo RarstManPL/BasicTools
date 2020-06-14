@@ -1,0 +1,291 @@
+Commands:
+  AdminChatCommand:
+    Name: 'adminchat'
+    Usage: '/adminchat <wiadomość>'
+    Description: 'Czat dla administracji'
+    Aliases:
+      - ac
+    IsEnabled: true
+  BanCommand:
+    Name: 'ban'
+    Usage: '/ban <nick/ip> <czas> [powód] [-s]'
+    Description: 'Blokowanie graczy/ip na serwerze'
+    Aliases: []
+    IsEnabled: true
+  BroadCastCommand:
+    Name: 'broadcast'
+    Usage: '/broadcast <wiadomość>'
+    Description: 'Ogłoszenie dla całego serwera'
+    Aliases:
+      - bc
+    IsEnabled: true
+  ChatCommand:
+    Name: 'chat'
+    Usage: '/chat <on/off/toggle/clear> [powód]'
+    Description: 'Zarządzanie czatem'
+    Aliases:
+      - czat
+    IsEnabled: true
+  ClearInventoryCommand:
+    Name: 'clearinventory'
+    Usage: '/clearinventory <inventory/enderchest> [nick]'
+    Description: 'Czyszczenie podanego ekwipunku'
+    Aliases:
+      - ci
+    IsEnabled: true
+  FlyCommand:
+    Name: 'fly'
+    Usage: '/fly <on/off/toggle> [nick]'
+    Description: 'Zmiana statusu latania'
+    Aliases: []
+    IsEnabled: true
+  GameModeCommand:
+    Name: 'gamemode'
+    Usage: '/adminchat <surivial/creative/adventure/spectator> [nick]'
+    Description: 'Zmiana trybu gry'
+    Aliases:
+      - gm
+    IsEnabled: true
+  GiveCommand:
+    Name: 'give'
+    Usage: '/give <nick> <przedmiot[:data]> <ilość> [data(name, lore, enchants, flags, unbreakable, glowing, owner, potions):wartość]'
+    Description: 'Dawanie przedmiotu'
+    Aliases: []
+    IsEnabled: true
+  GodCommand:
+    Name: 'god'
+    Usage: '/god <on/off/toggle> [nick]'
+    Description: 'Zmiana statusu boskości'
+    Aliases: []
+    IsEnabled: true
+  InfoCommand:
+    Name: 'info'
+    Usage: '/info [nick/ip]'
+    Description: 'Informacje dot. podanego gracza/ip'
+    Aliases:
+      - seen
+      - whois
+    IsEnabled: true
+  InventorySeeCommand:
+    Name: 'inventorysee'
+    Usage: '/inventorysee <inventory/enderchest> [nick]'
+    Description: 'Przeglądanie podanego ekwipunku'
+    Aliases:
+      - invsee
+    IsEnabled: true
+  KickCommand:
+    Name: 'kick'
+    Usage: '/kick <nick/*> [powód] [-s]'
+    Description: 'Wyrzucanie graczy z serwera'
+    Aliases:
+    IsEnabled: true
+  MuteCommand:
+    Name: 'mute'
+    Usage: '/mute <nick> [powód] [-s]'
+    Description: 'Wyciszanie gracza'
+    Aliases: []
+    IsEnabled: true
+  SocialSpyCommand:
+    Name: 'socialspy'
+    Usage: '/socialspy <on/off/toggle> [nick]'
+    Description: 'Zmiana statusu szpiegowania'
+    Aliases: []
+    IsEnabled: true
+  TeleportAllCommand:
+    Name: 'teleportall'
+    Usage: '/teleportall'
+    Description: 'Teleportacja wszystkich graczy do siebie'
+    Aliases:
+      - tpall
+    IsEnabled: true
+  TeleportCommand:
+    Name: 'teleport'
+    Usage: '/teleport <nick/x> [[nick]/<y>] [<z>] [[nick]]'
+    Description: 'Teleportacja'
+    Aliases:
+      - tp
+    IsEnabled: true
+  TimeCommand:
+    Name: 'time'
+    Usage: '/time <czas> [świat]'
+    Description: 'Zmiana czasu'
+    Aliases: []
+    IsEnabled: true
+  UnBanCommand:
+    Name: 'unban'
+    Usage: '/unban <nick/ip>'
+    Description: 'Odblokowanie nicku/ip'
+    Aliases: []
+    IsEnabled: true
+  UnMuteCommand:
+    Name: 'unmute'
+    Usage: '/unmute <nick>'
+    Description: 'Odciszenie gracza'
+    Aliases: []
+    IsEnabled: true
+  VanishCommand:
+    Name: 'vanish'
+    Usage: '/vanish <on/off/toggle> [nick]'
+    Description: 'Zmiana statusu ukrycia'
+    Aliases: []
+    IsEnabled: true
+  WeatherCommand:
+    Name: 'weather'
+    Usage: '/weather <pogoda> [świat]'
+    Description: 'Zmiana pogody'
+    Aliases: []
+    IsEnabled: true
+  ListCommand:
+    Name: 'list'
+    Usage: '/list'
+    Description: 'Lista graczy online'
+    Aliases: []
+    IsEnabled: true
+  MessageCommand:
+    Name: 'message'
+    Usage: '/message <nick> <wiadomość>'
+    Description: 'Wysyłanie prywatnej wiadomości'
+    Aliases:
+      - msg
+    IsEnabled: true
+  ReplyCommand:
+    Name: 'reply'
+    Usage: '/reply <wiadomość>'
+    Description: 'Odpowiadanie do ostatniego piszącego'
+    Aliases:
+      - r
+    IsEnabled: true
+  ReportCommand:
+    Name: 'report'
+    Usage: '/report <wiadomość>'
+    Description: 'Zgłaszanie problemu do administracji online'
+    Aliases:
+      - raport
+      - helpop
+    IsEnabled: true
+
+Messages:
+  NoPermission: 'Nie posiadasz odpowiednich uprawnień! {permission}'
+  BypassPermission: 'Podany gracz jest nie do ruszenia!'
+  OnlyPlayer: 'To polecenie przeznaczone jest jedynie dla graczy!'
+  BadUsage: 'Złe użycie. Poprawne: {usage}'
+  VaultNotHook: 'Wtyczka Vault nie została odnaleziona!'
+  WorldNotExistOrConsole: 'Podany świat nie istnieje lub jesteś konsolą i próbujesz wykonać polecenie bez podania świata'
+  PlayerNotExistOrConsole: 'Podany gracz nie istnieje, jest offline lub jesteś konsolą i próbujesz wykonać polecenie bez podania gracza'
+  PlayerNotExist: 'Podany gracz nie istnieje lub jest offline!'
+  TurnOptionNotExist: 'Podana opcja przełączenia nie istnieje!'
+  TimeIsZero: 'Podany czas po przetworzeniu wynosi 0. Sprawdź składnię'
+  IpNotExist: 'Podany adres ip nie istnieje!'
+  True: 'tak'
+  False: 'nie'
+  On: 'włączony'
+  Off: 'wyłączony'
+  You: 'ciebie'
+  Lack: 'brak'
+  LackInformation: 'brak informacji'
+  Unknown: 'nieznany'
+  Creative: 'kreatywny'
+  Survival: 'przetrwania'
+  Adventure: 'przygodowy'
+  Spectator: 'obserwator'
+  Permanently: 'na zawsze'
+  ReportSent: |-
+    Raport został wysłany!
+    Treść: {message}
+  ReportFormat: '[Raport] {nick} > {message}'
+  WeatherNotExist: 'Podany typ pogody nie istnieje!'
+  WeatherChanged: 'Pogoda została zmieniona dla {worlds} na {weather}'
+  Thunder: 'burza'
+  Storm: 'burza'
+  Rain: 'deszcz'
+  Clear: 'przejrzysta'
+  Sunny: 'słoneczna'
+  VanishStatusChanged: 'Status niewidzialności został dla {nick} został zmieniony na {status}'
+  VanishStatusChangedInfo: 'Twój status niewidzialności został zmieniony na {status}'
+  NotMuted: 'Podany gracz nie jest wyciszony!'
+  UnMuted: 'Odciszyłeś gracza!'
+  UnMutedInfo: 'Zostałeś odciszony!'
+  NotBanmed: 'Podany gracz lub IP nie jest zablokowane!'
+  UnBanned: 'Odblokowałeś podane IP lub podanego gracza!'
+  TimeNotExist: 'Podany czas nie istnieje!'
+  TimeChanged: 'Czas został zmieniony dla {worlds} na {time}'
+  LocalizationNotExist: 'Podana lokalizacja nie istnieje lub nie mogła zostać pobrana!'
+  CoordsNotNumber: 'Podane koordynaty nie są liczbami'
+  Teleported: 'Przeniosłeś gracza {nick} na lokalizacje {localization} w świecie {world}'
+  TeleportedInfo: 'Zostałeś przeniesiony na lokalizacje {localization} w świecie {world}'
+  TeleportedAll: 'Przeniosłeś wszystkich graczy do siebie'
+  TeleportedAllInfo: 'Zostałes przeniesiony na lokalizacje {localization} w świecie {world}'
+  SocialSpyStatusChanged: 'Status śledzenia został dla {nick} został zmieniony na {status}'
+  SocialSpyStatusChangedInfo: 'Twój status śledzenia został zmieniony na {status}'
+  GodStatusChanged: 'Status boskości został dla {nick} został zmieniony na {status}'
+  GodStatusChangedInfo: 'Twój boskości niewidzialności został zmieniony na {status}'
+  FlyStatusChanged: 'Status latania został dla {nick} został zmieniony na {status}'
+  FlyStatusChangedInfo: 'Twój status latania został zmieniony na {status}'
+  IsMuted: 'Podany gracz jest już wyciszony'
+  Muted: 'Wyciszyłeś gracza {muted} na {time} (do {date}) z powodem {reason}'
+  MutedInfo: 'Zostałeś wyciszony na {time} (do {date}) z powodem {reason} przez {muter}'
+  MutedBroadCastInfo: 'Gracz {muted} został wyciszony przez {muter} z powodem {reason} na {time} (do {date})'
+  DefaultMuteReason: 'Admin ma zawsze rację!'
+  Kicked: 'Wyrzuciłeś {kicked} z serwera z powodem {reason}'
+  KickedBroadCastInfo: 'Administrator {kicker} wyrzucił {kicked} z serwera z powodem {reason}'
+  KickedAll: 'Wyrzuciłeś wszystkich graczy z serwera z powodem {reason}'
+  KickedAllBroadCastInfo: 'Wyrzucono wszystkich graczy z powodem {reason}'
+  KickFormat: '{reason} - {kicker}'
+  DefaultKickReason: 'Admin ma zawsze rację!'
+  InventoryNotExist: 'Podany typ ekwipunku nie istnieje!'
+  InventoryOpened: 'Otwarłeś {inventory} gracza {nick}'
+  EnderChest: 'skrzynię kresu'
+  Inventory: 'ekwipunek'
+  IpInfo: |-
+    Użytkownicy: {users}
+    Zablokowane: {isbaned}
+    Powód bana: {banreason}
+    Data końca bana: {banremaining}
+  PlayerInfo: |-
+    Nick: {nick}
+    UUID: {uuid}
+    Pierwsze IP: {firstip}
+    Ostatnie IP: {lastip}
+    Pierwsza gra: {firstplay}
+    Ostatnia gra: {lastplay}
+    Zablokowany: {isbaned}
+    Powód bana: {banreason}
+    Data końca bana: {banremaining}
+    Wyciszony: {ismuted}
+    Powód wyciszenia: {mutereason}
+    Data końca wyciszenia: {muteremaining}
+    Życie: {healthlevel}
+    Najedzenie: {foodleavel}
+    Level: {explevel}
+    Lata: {isflying}
+    Spi: {issleeping}
+    Online: {isonline}
+    Niewidzialny: {isvanished}
+    Boski: {isgoded}
+    Sledzi: {issocialspying}
+    Skrada się: {issneaking}
+    Swiat: {world}
+    Lokalizacja: {localization}
+    Tryb gry: {gamemode}
+    Biega: {issprinting}
+    Pływa: {isswimming}
+    Op: {isop}
+    Dodany do białej listy: {iswhitelisted}
+  Gived: 'Dałeś {amount}x {item} do ekwipunku gracza {nick}'
+  GivedInfo: 'Otrzymałeś {amount}x {item} do ekwipunku.'
+  GameModeNotExist: 'Podany tryb gry nie istnieje!'
+  GameModeChanged: 'Zmieniłeś tryb gracza {nick} na {gamemode}'
+  GameModeChangedInfo: 'Twój tryb gry został zmieniony na {gamemode}'
+  InventoryCleared: 'Wyczyściłeś {inventory} gracza {nick}'
+  InventoryClearedInfo: 'Twój {inventory} został wyczyszczony!'
+  BroadCastFormat: '[Ogłoszenie] {message}'
+  AdminChatFormat: '[AdminChat] {player} > {message}'
+  IsBanned: 'Ten gracz lub to ip jest już zablokowane'
+  NoUsers: 'Brak użytkowników do zablokowania'
+  BanFormat: '{reason} - {date} - {time} - {blocker}'
+  Banned: 'Zablokowałeś {blocked} na serwerze na {time} (do {date}) z powodem {reason}'
+  BannedBroadCastInfo: 'Admininstrator {blocker} zablokował gracza/ip {blocked} na serwerze z powodem {reason} do {date} (na {time}).'
+  DefaultBanReason: 'Admin ma zawsze rację'
+  ChatToggledInfo: 'Status czatu został zmieniony na {status} z powodem {reason} przez {nick}'
+  ChatClearedInfo: 'Czat został wyczyszczony przez {nick} z powodem {reason}'
+  ChatActionDefaultReason: 'Admin ma zawsze rację!'
