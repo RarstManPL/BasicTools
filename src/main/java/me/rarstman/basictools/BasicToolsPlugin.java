@@ -45,7 +45,10 @@ public class BasicToolsPlugin extends JavaPlugin {
         );
 
         this.basicToolsLogger.info("Registering database...");
-        this.registerDatabase();
+
+        if(!this.registerDatabase()) {
+            return;
+        }
 
         this.userManager = new UserManager();
         this.userManager.loadUsers();
@@ -105,11 +108,16 @@ public class BasicToolsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.userManager.saveUsers();
-        this.databaseProvider.disableDatabase();
+        if(this.userManager != null && this.databaseProvider != null) {
+            this.userManager.saveUsers();
+        }
+
+        if(this.databaseProvider != null) {
+            this.databaseProvider.disableDatabase();
+        }
     }
 
-    public void registerDatabase() {
+    public boolean registerDatabase() {
         try {
             this.databaseProvider = new MySQL(ConfigManager.getConfig(BasicToolsConfig.class).mySQLDatabaseData)
                     .createTable(
@@ -130,8 +138,9 @@ public class BasicToolsPlugin extends JavaPlugin {
         } catch (final DatabaseInitializeException exception) {
             this.basicToolsLogger.error(exception.getMessage());
             this.getPluginLoader().disablePlugin(this);
-            return;
+            return false;
         }
+        return true;
     }
 
     public UserManager getUserManager() {

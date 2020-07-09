@@ -28,11 +28,10 @@ public class BasicToolsCommand extends CommandProvider {
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
-        if(!this.config.reload() || !this.commands.reload() || !this.messages.reload()){
+        if(!this.config.reload() || !this.commands.reload() || !this.messages.reload() || !this.plugin.registerDatabase()){
             this.rarstAPIMessages.configurationNotCorrectlyReloaded.send(commandSender);
             return;
         }
-        this.plugin.registerDatabase();
         this.rarstAPIMessages.configurationReloaded.send(commandSender);
     }
 
