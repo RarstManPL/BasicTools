@@ -4,6 +4,7 @@ import me.rarstman.basictools.cache.ChatCache;
 import me.rarstman.basictools.command.admin.*;
 import me.rarstman.basictools.command.inventory.PanelCommand;
 import me.rarstman.basictools.command.player.*;
+import me.rarstman.basictools.command.plugin.BasicToolsCommand;
 import me.rarstman.basictools.configuration.BasicToolsCommands;
 import me.rarstman.basictools.configuration.BasicToolsConfig;
 import me.rarstman.basictools.configuration.BasicToolsMessages;
@@ -92,7 +93,8 @@ public class BasicToolsPlugin extends JavaPlugin {
                 new MessageCommand(),
                 new ListCommand(),
                 new HelpCommand(),
-                new ReplyCommand()
+                new ReplyCommand(),
+                new BasicToolsCommand()
         );
 
         this.basicToolsLogger.info("Registering task...");
