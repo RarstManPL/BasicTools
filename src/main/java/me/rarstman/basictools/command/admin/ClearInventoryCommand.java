@@ -1,51 +1,61 @@
 package me.rarstman.basictools.command.admin;
 
-import com.google.common.base.CaseFormat;
-import com.google.common.collect.ImmutableList;
-import me.rarstman.basictools.command.Command;
-import me.rarstman.basictools.configuration.Configuration;
-import me.rarstman.basictools.util.ChatUtil;
+import me.rarstman.basictools.BasicToolsPlugin;
+import me.rarstman.basictools.configuration.BasicToolsCommands;
+import me.rarstman.basictools.configuration.BasicToolsMessages;
+import me.rarstman.basictools.data.UserManager;
+import me.rarstman.rarstapi.command.CommandProvider;
+import me.rarstman.rarstapi.configuration.ConfigManager;
+import me.rarstman.rarstapi.util.PermissionUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ClearInventoryCommand extends Command {
+public class ClearInventoryCommand extends CommandProvider {
 
-    public ClearInventoryCommand(final Configuration.BasicCommand basicCommand) {
-        super(basicCommand, false);
+    private final BasicToolsMessages messages;
+    private final UserManager userManager;
+
+    public ClearInventoryCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).clearInventoryCommandData, "basictools.command.clearinventory", false);
+
+        this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
+        this.userManager = BasicToolsPlugin.getPlugin().getUserManager();
     }
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
         if(args.length < 1){
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("BadUsage"), "{usage}", this.usageMessage);
+            this.rarstAPIMessages.badUsage.send(commandSender, "{USAGE}", this.usageMessage);
             return;
         }
         final String permission = args.length < 1 ? null : this.permission + ".other";
 
-        if (!this.vaultHook.hasPermission(commandSender, permission)) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NoPermission"), "{permission}", permission);
+        if (!PermissionUtil.hasPermission(commandSender, permission)) {
+            this.rarstAPIMessages.noPermission.send(commandSender, "{PERMISSION}", permission);
             return;
         }
-        final String permission1 = Arrays.asList("enderchest", "inventory").stream().filter(inventoryType -> args[0].equalsIgnoreCase(inventoryType)).findAny().isPresent() ? this.permission + "." + args[0].toLowerCase() : null;
+        final String permission1 = Arrays.asList("enderchest", "inventory").stream().anyMatch(inventoryType -> args[0].equalsIgnoreCase(inventoryType)) ? this.permission + "." + args[0].toLowerCase() : null;
 
-        if (!this.vaultHook.hasPermission(commandSender, permission1)) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NoPermission"), "{permission}", permission1);
+        if (!PermissionUtil.hasPermission(commandSender, permission1)) {
+            this.rarstAPIMessages.noPermission.send(commandSender, "{PERMISSION}", permission1);
             return;
         }
-        final Player player1 = !(commandSender instanceof Player) && args.length < 2 ? null : args.length > 1 ? this.userManager.getUser(args[1]).isPresent() ? this.userManager.getUser(args[1]).get().getOfflinePlayer().isOnline() ? this.userManager.getUser(args[1]).get().getPlayer() : null : null : (Player) commandSender;
+        final Player player1 = !(commandSender instanceof Player) && args.length < 2 ? null : args.length > 1 ? this.userManager.getUser(args[1]).isPresent() ? this.userManager.getUser(args[1]).get().getPlayer() : null : (Player) commandSender;
 
-        if (player1 == null) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("PlayerNotExistOrConsole"));
+        if (player1 == null || !this.userManager.canInteractPlayer(commandSender, player1)) {
+            this.rarstAPIMessages.playerNotExistOrConsole.send(commandSender);
             return;
         }
         Inventory inventory = null;
 
-        switch (args[0]) {
+        switch (args[0].toLowerCase()) {
             case "enderchest": {
                 inventory = player1.getEnderChest();
                 break;
@@ -57,24 +67,42 @@ public class ClearInventoryCommand extends Command {
         }
 
         if (inventory == null) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("InventoryNotExist"));
+            this.messages.inventoryNotExist.send(commandSender);
             return;
         }
+        final String variableInventory = inventory.getType() == InventoryType.ENDER_CHEST ? this.messages.enderChest : this.messages.inventory;
+
         inventory.clear();
-        ChatUtil.sendMessage(commandSender, this.messages.getMessage("InventoryCleared"),
-                "{nick}", player1.getName(),
-                "{inventory}", this.messages.getMessage(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, inventory.getType().toString()))
+        this.messages.inventoryCleared.send(commandSender,
+                "{NICK}", player1.getName(),
+                "{INVENTORY}", variableInventory
         );
-        ChatUtil.sendMessage(player1, this.messages.getMessage("InventoryClearedInfo"), "{inventory}", this.messages.getMessage(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, inventory.getType().toString())));
+        this.messages.inventoryClearedInfo.send(player1, "{INVENTORY}", variableInventory);
     }
 
     @Override
-    public List<String> tabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
+    public List<String> onTabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
         switch (args.length) {
             case 1: {
-                return ImmutableList.of(this.vaultHook.hasPermission(commandSender, this.permission + ".other") ? this.userManager.playersThatCanInteract(commandSender).stream().map(Player::getName).collect(Collectors.joining()) : null);
+                final List<String> list = new ArrayList<>();
+
+                if(PermissionUtil.hasPermission(commandSender, this.permission + ".inventory")) {
+                    list.add("inventory");
+                }
+
+                if(PermissionUtil.hasPermission(commandSender, this.permission + ".enderchest")) {
+                    list.add("enderchest");
+                }
+                return list;
+            }
+            case 2: {
+                if(!PermissionUtil.hasPermission(commandSender, this.permission + ".other")) {
+                    break;
+                }
+                return this.userManager.playersThatCanInteract(commandSender).stream().map(Player::getName).collect(Collectors.toList());
             }
         }
-        return ImmutableList.of();
+        return new ArrayList<>();
     }
+
 }

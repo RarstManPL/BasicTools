@@ -1,57 +1,69 @@
 package me.rarstman.basictools.command.admin;
 
-import com.google.common.collect.ImmutableList;
-import me.rarstman.basictools.command.Command;
-import me.rarstman.basictools.configuration.Configuration;
-import me.rarstman.basictools.util.ChatUtil;
+import me.rarstman.basictools.configuration.BasicToolsCommands;
+import me.rarstman.basictools.configuration.BasicToolsMessages;
+import me.rarstman.rarstapi.command.CommandProvider;
+import me.rarstman.rarstapi.configuration.ConfigManager;
+import me.rarstman.rarstapi.util.PermissionUtil;
+import me.rarstman.rarstapi.util.RegexUtil;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class UnBanCommand extends Command {
+public class UnBanCommand extends CommandProvider {
 
-    private final Pattern ipPattern;
+    private final BasicToolsMessages messages;
 
-    public UnBanCommand(final Configuration.BasicCommand basicCommand) {
-        super(basicCommand, false);
+    public UnBanCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).unBanCommandData, "basictools.command.unban", false);
 
-        this.ipPattern = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
+        this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
     }
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
         if (args.length < 1) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("BadUsage"), "{usage}", this.usageMessage);
+            this.rarstAPIMessages.badUsage.send(commandSender, "{USAGE}", this.usageMessage);
             return;
         }
-        final BanList.Type type = ipPattern.matcher(args[0]).matches() ? BanList.Type.IP : BanList.Type.NAME;
+        final BanList.Type type = RegexUtil.ipPatternMatch(args[0]) ? BanList.Type.IP : BanList.Type.NAME;
         final String permission = this.permission + "." + type.name().toLowerCase();
 
-        if (!this.vaultHook.hasPermission(commandSender, permission)) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NoPermission"), "{permission}", permission);
+        if (!PermissionUtil.hasPermission(commandSender, permission)) {
+            this.rarstAPIMessages.noPermission.send(commandSender, "{PERMISSION}", permission);
             return;
         }
 
         if (!Bukkit.getBanList(type).isBanned(args[0])) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NotBanned"));
+            this.messages.notBanned.send(commandSender);
             return;
         }
         Bukkit.getBanList(type).pardon(args[0]);
-        ChatUtil.sendMessage(commandSender, this.messages.getMessage("UnBanned"));
+        this.messages.unBanned.send(commandSender);
     }
 
     @Override
-    public List<String> tabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
+    public List<String> onTabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
         switch (args.length) {
             case 1: {
-                return ImmutableList.of(this.vaultHook.hasPermission(commandSender, this.permission + ".name") ? Bukkit.getBanList(BanList.Type.NAME).getBanEntries().stream().map(BanEntry::getTarget).collect(Collectors.joining()) : null, this.vaultHook.hasPermission(commandSender, this.permission + ".ip") ? Bukkit.getBanList(BanList.Type.IP).getBanEntries().stream().map(BanEntry::getTarget).collect(Collectors.joining()) : null);
+                final List<String> list = new ArrayList<>();
+
+                if(PermissionUtil.hasPermission(commandSender, this.permission + ".name")) {
+                    list.addAll(Bukkit.getBanList(BanList.Type.NAME).getBanEntries().stream().map(BanEntry::getTarget).collect(Collectors.toList()));
+                }
+
+                if(PermissionUtil.hasPermission(commandSender, this.permission + ".ip")) {
+                    list.addAll(Bukkit.getBanList(BanList.Type.IP).getBanEntries().stream().map(BanEntry::getTarget).collect(Collectors.toList()));
+                }
+                return list;
             }
         }
-        return ImmutableList.of();
+        return new ArrayList<>();
     }
+
 }

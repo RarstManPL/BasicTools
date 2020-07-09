@@ -1,0 +1,130 @@
+WorldNotExistOrConsole: 'Podany świat nie istnieje lub jesteś konsolą i próbujesz wykonać komendę bez podania nazwy świata.'
+TimeIsZero: 'Podany czas po przetworzeniu wynosi 0. Sprawdź składnię.'
+IpNotExist: 'Podany adres ip nie istnieje!'
+Creative: 'kreatywny'
+Survival: 'przetrwania'
+Adventure: 'przygodowy'
+Spectator: 'obserwacyjny'
+Permanently: 'na zawsze'
+ReportSent: |-
+  Raport został wysłany!
+  Treść: {MESSAGE}
+ReportFormat: '[Raport] {NICK} > {MESSAGE}'
+WeatherNotExist: 'Podany typ pogody nie istnieje!'
+WeatherChanged: 'Pogoda została zmieniona dla {WORLDS} na {WEATHER}.'
+Thunder: 'burza'
+Storm: 'burza'
+Rain: 'deszcz'
+Clear: 'przejrzysta'
+Sun: 'słoneczna'
+VanishStatusChanged: 'Status niewidzialności został dla {NICK} zmieniony na {STATUS}.'
+VanishStatusChangedInfo: 'Twój status niewidzialności został zmieniony na {STATUS}.'
+NotMuted: 'Podany gracz nie jest wyciszony!'
+UnMuted: 'Odciszyłeś gracza!'
+UnMutedInfo: 'Zostałeś odciszony!'
+NotBanned: 'Podany gracz lub IP nie jest zablokowane!'
+UnBanned: 'Odblokowałeś podane IP lub podanego gracza!'
+TimeNotExist: 'Podany czas nie istnieje!'
+TimeChanged: 'Czas został zmieniony dla {WORLDS} na {TIME}.'
+LocalizationNotExist: 'Podana lokalizacja nie istnieje lub nie mogła zostać pobrana!'
+CoordsNotNumber: 'Podane koordynaty nie są liczbami.'
+Teleported: 'Przeniosłeś gracza {NICK} na lokalizację {LOCALIZATION} w świecie {WORLD}.'
+TeleportedInfo: 'Zostałeś przeniesiony na lokalizację {LOCALIZATION} w świecie {WORLD}.'
+TeleportedAll: 'Przenisłeś wszystkich graczy do siebie!'
+TeleportedAllInfo: 'Zostałeś przeniesiony na lokalizację {LOCALIZATION} w świecie {WORLD}!'
+SocialSpyStatusChanged: 'Statuś śledzenia prywatnych wiadomości został dla {NICK} zmieniony na {STATUS}.'
+SocialSpyStatusChangedInfo: 'Twój status śledzenia prywatnych wiadomości został zmieniony na {STATUS}.'
+GodStatusChanged: 'Status boskości dla {NICK} został zmieniony na {STATUS}.'
+GodStatusChangedInfo: 'Twój status boskości został zmieniony na {STATUS}.'
+FlyStatusChanged: 'Status latania został dla {NICK} zmieniony na {STATUS}.'
+FlyStatusChangedInfo: 'Twój status latania został zmieniony na {STATUS}.'
+IsMuted: 'Podany gracz jest już wyciszony.'
+Muted: 'Wyciszyłeś gracza {MUTED} na {TIME} (do {DATE}) z powodem {REASON}.'
+MutedInfo: 'Zostałeś wyciszony na {TIME} (do {DATE}) z powodem {REASON} przez {MUTER}.'
+MutedBroadCastInfo: 'Gracz {MUTED} został wyciszony przez {MUTER} z powodem {REASON} na {TIME} (do {DATE}).'
+DefaultMuteReason: 'Admin ma zawsze rację!'
+Kicked: 'Wyrzuciłeś {KICKED} z serwera z powodem {REASON}.'
+KickedBroadCastInfo: 'Administrator {KICKER} wyrzucił {KICKED} z serwera z powodem {REASON}.'
+KickedAll: 'Wyrzuciłeś wszystkich graczy z serwera z powodem {REASON}.'
+KickedAllBroadCastInfo: '{KICKER} wyrzucił wszystkich graczy z powodem {REASON}.'
+KickFormat: '{REASON} - {KICKER}'
+DefaultKickReason: 'Admin ma zawsze rację!'
+InventoryNotExist: 'Podany typ ekwipunku nie istnieje.'
+InventoryOpened: 'Otwarłeś {INVENTORY} gracza {NICK}.'
+EnderChest: 'skrzynię kresu'
+Inventory: 'ekwipunek'
+IpInfo: |-
+  Użytkownicy: {USERS}
+  Zablokowane: {ISBANNED}
+  Powód bana: {BANREASON}
+  Data końca bana: {BANREMAINING}
+PlayerInfo: |-
+  Nick: {NICK}
+  UUID: {UUID}
+  Pierwsze IP: {FIRSTIP}
+  Ostatnie IP: {LASTIP}
+  Pierwsza gra: {FIRSTPLAY}
+  Ostatnia gra: {LASTPLAY}
+  Zablokowany: {ISBANNED}
+  Powód bana: {BANREASON}
+  Data końca bana: {BANREMAINING}
+  Wyciszony: {ISMUTED}
+  Powód wyciszenia: {MUTEREASON}
+  Data końca wyciszenia: {MUTEREMAINING}
+  Życie: {HEALTHLEVEL}
+  Najedzenie: {FOODLEVEL}
+  Level: {EXPLEVEL}
+  Lata: {ISFLYING}
+  Spi: {ISLEEPING}
+  Online: {ISONLINE}
+  Niewidzialny: {ISVANISHED}
+  Boski: {ISGODED}
+  Sledzi: {ISSOCIALSPYING}
+  Skrada się: {ISSNEAKING}
+  Swiat: {WORLD}
+  Lokalizacja: {LOCALIZATION}
+  Tryb gry: {GAMEMODE}
+  Biega: {ISSPRINTING}
+  Pływa: {ISSWIMMING}
+  Op: {ISOP}
+  Dodany do białej listy: {ISWHITELISTED}
+Gave: 'Dałeś {AMOUNT}x {ITEM} do ekwipunku gracza {NICK}.'
+GaveInfo: 'Otrzymałeś {AMOUNT}x {ITEM} do ekwipunku.'
+GameModeNotExist: 'Podany tryb gry nie istnieje!'
+GameModeChanged: 'Zmieniłeś tryb gracza {NICK} na {GAMEMODE}.'
+GameModeChangedInfo: 'Twój tryb gry ozstał zmieniony na {GAMEMODE}.'
+InventoryCleared: 'Wyczyściłeś {INVENTORY} gracza {NICK}.'
+InventoryClearedInfo: 'Twój {INVENTORY} został wyczyszczony!'
+BroadCastFormat: '[Ogłoszenie] {MESSAGE}'
+AdminChatFormat: '[AdminChat] {NICK} > {MESSAGE}'
+IsBanned: 'Ten gracz lub to ip jest już zablokowane.'
+NoUsers: 'Brak użytkowników do zablokowania.'
+BanFormat: '{REASON} - {DATE} - {TIME} - {BLOCKER}'
+Banned: 'Zablokowałeś {BLOCKED} na serwerze na {TIME} (do {DATE}) z powodem {REASON}.'
+BannedBroadCastInfo: 'Administrator {BLOCKER} zablokował gracza/ip {BLOCKED} na serwerze z powodem {REASON} do {DATE} (na {TIME}).'
+DefaultBanReason: 'Admin ma zawsze rację!'
+ChatToggled: 'Zmieniłeś status czatu na {STATUS} z powodem {REASON}.'
+ChatCleared: 'Wyczyściłeś czat z powodem {REASON}.'
+ChatToggledInfo: 'Status czatu został zmieniony na {STATUS} z powodem {REASON} przez {NICK}.'
+ChatClearedInfo: 'Czat zosatał wyczyszczony przez {NICK} z powodem {REASON}.'
+ChatActionDefaultReason: 'Admin ma zawsze rację!'
+BypassPermission: 'Ten gracz jest nie do ruszenia!'
+ChatIsDisabled: 'Czat jest aktualnie wyłączony. Nie możesz na nim pisać!'
+YouAreMuted: 'Jesteś wyciszony i nie możesz pisać na czacie (powód: {REASON}, do: {DATE}).'
+HelpMessage: |-
+  Przykładowy tekst pomocy
+  Możesz go zmienić w pliku messages.yml
+MessageFormat: '[{NICK1} {ARROW} {NICK2}] {MESSAGE}'
+ArrowRight: '>'
+ArrowLeft: '<'
+PlayerDontReciveMessages: 'Ten gracz nie odbiera wiadomości prywatnych.'
+ReplyUserNotExist: 'Nie masz do kogo odpisać...'
+BlockMessagesStatusChanged: 'Status odbieania wiadomości dla {NICK} zmieniony na {STATUS}.'
+BlockMessagesStatusChangedInfo: 'Twój status odbierania wiadomości został zmieniony na {STATUS}.'
+CantOpenPanelInventory: 'Panel nie mógł zostać otworzony...'
+ListFormat: |-
+  Online: {ONLINE}
+  Grupy:
+  {GROUPSONLINE}
+GroupsOnlineFormat: '{GROUP}: {PLAYERS}'
+SocialSpyFormat: '&7{SENDER} > {RECIVER}: {MESSAGE}'

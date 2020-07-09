@@ -1,56 +1,64 @@
 package me.rarstman.basictools.command.admin;
 
-import com.google.common.collect.ImmutableList;
-import me.rarstman.basictools.command.Command;
-import me.rarstman.basictools.configuration.Configuration;
-import me.rarstman.basictools.util.ChatUtil;
-import me.rarstman.basictools.util.LocationUtil;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
+import me.rarstman.basictools.BasicToolsPlugin;
+import me.rarstman.basictools.configuration.BasicToolsCommands;
+import me.rarstman.basictools.configuration.BasicToolsMessages;
+import me.rarstman.basictools.data.UserManager;
+import me.rarstman.rarstapi.command.CommandProvider;
+import me.rarstman.rarstapi.configuration.ConfigManager;
+import me.rarstman.rarstapi.util.LocationUtil;
+import me.rarstman.rarstapi.util.NumberUtil;
+import me.rarstman.rarstapi.util.PermissionUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TeleportCommand extends Command {
+public class TeleportCommand extends CommandProvider {
 
-    public TeleportCommand(final Configuration.BasicCommand basicCommand) {
-        super(basicCommand, false);
+    private final BasicToolsMessages messages;
+    private final UserManager userManager;
+
+    public TeleportCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).teleportCommandData, "basictools.command.teleport", false);
+
+        this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
+        this.userManager = BasicToolsPlugin.getPlugin().getUserManager();
     }
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
         if (args.length < 1) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("BadUsage"), "{usage}", this.usageMessage);
+            this.rarstAPIMessages.badUsage.send(commandSender, "{USAGE}", this.usageMessage);
             return;
         }
-        final Integer playerPosition = args.length > 1 && args.length < 3 ? 1 : args.length > 3 ? 3 : null;
-        final String permission = playerPosition == null ? null : this.permission + ".other";
+        final int playerPosition = args.length > 1 && args.length < 3 ? 1 : args.length > 3 ? 3 : -1;
+        final String permission = playerPosition == -1 ? null : this.permission + ".other";
 
-        if (!this.vaultHook.hasPermission(commandSender, permission)) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NoPermission"), "{permission}", permission);
+        if (!PermissionUtil.hasPermission(commandSender, permission)) {
+            this.rarstAPIMessages.noPermission.send(commandSender, "{PERMISSION}", permission);
             return;
         }
+        final Player player1 = playerPosition == -1 && !(commandSender instanceof Player) ? null : playerPosition != -1 ? this.userManager.getUser(args[playerPosition]).isPresent() ? this.userManager.getUser(args[playerPosition]).get().getPlayer() : null : (Player) commandSender;
 
-        final Player player1 = playerPosition == null && !(commandSender instanceof Player) ? null : playerPosition != null ? this.userManager.getUser(args[playerPosition]).isPresent() ? this.userManager.getUser(args[1]).get().getOfflinePlayer().isOnline() ? this.userManager.getUser(args[playerPosition]).get().getPlayer() : null : null : (Player) commandSender;
-
-        if (player1 == null) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("PlayerNotExistOrConsole"));
+        if (player1 == null || !this.userManager.canInteractPlayer(commandSender, player1)) {
+            this.rarstAPIMessages.playerNotExistOrConsole.send(commandSender);
             return;
         }
-        Location location = null;
+        Location location;
 
         switch (args.length) {
             case 1:
             case 2: {
-                location = this.userManager.getUser(args[0]).isPresent() ? this.userManager.getUser(args[0]).get().getPlayer().isOnline() ? this.userManager.getUser(args[0]).get().getPlayer().getLocation() : null : null;
+                location = this.userManager.getUser(args[0]).isPresent() ? this.userManager.getUser(args[0]).get().isOnline() ? this.userManager.canInteractPlayer(commandSender, this.userManager.getUser(args[0]).get().getPlayer()) ? this.userManager.getUser(args[0]).get().getPlayer().getLocation() : null : null : null;
                 break;
             }
             default: {
-                if (!StringUtils.isNumeric(args[0]) || !StringUtils.isNumeric(args[1]) || !StringUtils.isNumeric(args[2])) {
-                    ChatUtil.sendMessage(commandSender, this.messages.getMessage("CoordsNotNumber"));
+                if (!NumberUtil.isNumber(args[0]) || !NumberUtil.isNumber(args[1]) || !NumberUtil.isNumber(args[2])) {
+                    this.messages.coordsNotNumber.send(commandSender);
                     return;
                 }
                 location = new Location(player1.getWorld(), Double.parseDouble(args[0]), Double.parseDouble(args[1]), Double.parseDouble(args[2]));
@@ -59,38 +67,44 @@ public class TeleportCommand extends Command {
         }
 
         if (location == null) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("LocalizationNotExist"));
+            this.messages.localizationNotExist.send(commandSender);
             return;
         }
+        final String variableLocation = LocationUtil.locationToString(location);
+
         player1.teleport(location);
-        ChatUtil.sendMessage(commandSender, this.messages.getMessage("Teleported"),
-                "{localization}", LocationUtil.locationToString(location),
-                "{world}", location.getWorld().getName(),
-                "{nick}", commandSender instanceof Player ? (Player) commandSender == player1 ? this.messages.getMessage("You") : player1.getName() : player1.getName()
+        this.messages.teleported.send(commandSender,
+                "{LOCALIZATION}", variableLocation,
+                "{WORLD}", location.getWorld().getName(),
+                "{NICK}", commandSender instanceof Player ? (Player) commandSender == player1 ? this.rarstAPIMessages.you : player1.getName() : player1.getName()
         );
-        ChatUtil.sendMessage(player1, this.messages.getMessage("TeleportedInfo"),
-                "{localization}", LocationUtil.locationToString(location),
-                "{world}", location.getWorld().getName()
+        this.messages.teleportedInfo.send(player1,
+                "{LOCALIZATION}", variableLocation,
+                "{WORLD}", location.getWorld().getName()
         );
     }
 
     @Override
-    public List<String> tabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
+    public List<String> onTabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
+        if(PermissionUtil.hasPermission(commandSender, this.permission))
         switch (args.length) {
             case 1: {
-                return ImmutableList.of(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining()), "~0");
+                return this.userManager.playersThatCanInteract(commandSender).stream().map(Player::getName).collect(Collectors.toList());
             }
             case 2: {
-                return ImmutableList.of(this.vaultHook.hasPermission(commandSender, this.permission + ".other") ? Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining()) : null, "~0");
-            }
-            case 3: {
-                return ImmutableList.of("~0");
+                if(!PermissionUtil.hasPermission(commandSender, this.permission + ".other")) {
+                    break;
+                }
+                return this.userManager.playersThatCanInteract(commandSender).stream().map(Player::getName).collect(Collectors.toList());
             }
             case 4: {
-                return ImmutableList.of(this.vaultHook.hasPermission(commandSender, this.permission + ".other") ? Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining()) : null);
+                if(!PermissionUtil.hasPermission(commandSender, this.permission + ".other")) {
+                    break;
+                }
+                return this.userManager.playersThatCanInteract(commandSender).stream().map(Player::getName).collect(Collectors.toList());
             }
         }
-        return ImmutableList.of();
+        return new ArrayList<>();
     }
 
 }

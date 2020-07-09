@@ -1,5 +1,6 @@
 main: 'me.rarstman.basictools.BasicToolsPlugin'
-name: ${project.name}
+name: 'BasicTools'
+author: 'RarstManPL'
 version: ${project.version}
-description: ${project.description}
-author: [RarstManPL]
+depend: [RarstAPI]
+api-version: '1.16'

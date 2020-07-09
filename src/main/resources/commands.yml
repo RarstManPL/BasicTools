@@ -1,0 +1,296 @@
+AdminChatCommand:
+  Name: 'adminchat'
+  Aliases:
+    - ac
+  Description: 'Czat dla administracji'
+  Usage: '/adminchat <wiadomość>'
+  Enabled: true
+  Item: 'BOOK'
+  Field: 'a'
+  InPanel: true
+
+BanCommand:
+  Name: 'ban'
+  Aliases: []
+  Description: 'Blokowanie graczy/ip'
+  Usage: '/ban <nick/ip> <czas> [powód] [-s]'
+  Enabled: true
+  Item: 'DIAMOND_SWORD'
+  Field: 'b'
+  InPanel: true
+
+BroadCastCommand:
+  Name: 'broadcast'
+  Aliases:
+    - bc
+  Description: 'Tekstowe ogłoszenie na czacie'
+  Usage: '/broadcast <wiadomość>'
+  Enabled: true
+  Item: 'OAK_SIGN'
+  Field: 'c'
+  InPanel: true
+
+ChatCommand:
+  Name: 'chat'
+  Aliases: []
+  Description: 'Zarządzanie czatem'
+  Usage: '/chat <on/off/clear> [powód]'
+  Enabled: true
+  Item: 'BONE'
+  Field: 'd'
+  InPanel: true
+
+ClearInventoryCommand:
+  Name: 'clearinventory'
+  Aliases:
+    - ci
+    - clear
+  Description: 'Czyszczenie ekwipunku'
+  Usage: '/clearinventory <inventory/enderchest> [nick]'
+  Enabled: true
+  Item: 'LAVA_BUCKET'
+  Field: 'e'
+  InPanel: true
+
+FlyCommand:
+  Name: 'fly'
+  Aliases: []
+  Description: 'Zmiana trybu latania'
+  Usage: '/fly [on/off] [nick]'
+  Enabled: true
+  Item: 'ENDER_PEARL'
+  Field: 'f'
+  InPanel: true
+
+GameModeCommand:
+  Name: 'gamemode'
+  Aliases:
+    - gm
+  Description: 'Zmiana trybu gry'
+  Usage: '/gamemode <survival/creative/adventure/spectator> [nick]'
+  Enabled: true
+  Item: 'REDSTONE'
+  Field: 'g'
+  InPanel: true
+
+GiveCommand:
+  Name: 'give'
+  Aliases: []
+  Description: 'Dawaie przedmiotów'
+  Usage: '/give <nick> <przedmiot[:data]> [ilość] [data...]'
+  Enabled: true
+  Item: 'EMERALD_BLOCK'
+  Field: 'h'
+  InPanel: true
+
+GodCommand:
+  Name: 'god'
+  Aliases: []
+  Description: 'Zmiana trybu boskości'
+  Usage: '/god [on/off] [nick]'
+  Enabled: true
+  Item: 'TOTEM_OF_UNDYING'
+  Field: 'i'
+  InPanel: true
+
+InfoCommand:
+  Name: 'info'
+  Aliases:
+    - seen
+    - whois
+  Description: 'Informacje nt. gracza/ip'
+  Usage: '/info <nick/ip>'
+  Enabled: true
+  Item: 'PAPER'
+  Field: 'j'
+  InPanel: true
+
+InventorySeeCommand:
+  Name: 'inventorysee'
+  Aliases:
+    - invsee
+  Description: 'Podglądanie ekwipunku'
+  Usage: '/inventorysee <inventory/enderchest> [nick]'
+  Enabled: true
+  Item: 'ENDER_CHEST'
+  Field: 'k'
+  InPanel: true
+
+KickCommand:
+  Name: 'kick'
+  Aliases: []
+  Description: 'Wyrzucanie graczy z serwera'
+  Usage: '/kick <nick/*> [powód] [-s]'
+  Enabled: true
+  Item: 'ARROW'
+  Field: 'l'
+  InPanel: true
+
+MuteCommand:
+  Name: 'mute'
+  Aliases: []
+  Description: 'Wyciszanie graczy na serwerze'
+  Usage: '/mute <nick> <czas> [powód] [-s]'
+  Enabled: true
+  Item: 'POTION'
+  Field: 'm'
+  InPanel: true
+
+SocialSpyCommand:
+  Name: 'socialspy'
+  Aliases: []
+  Description: 'Zmiana trybu szpiega prywatnych wiadomości'
+  Usage: '/socialspy [on/off] [nick]'
+  Enabled: true
+  Item: 'GLASS'
+  Field: 'n'
+  InPanel: true
+
+TeleportAllCommand:
+  Name: 'teleportall'
+  Aliases:
+    - tpall
+  Description: 'Teleportowanie wszystkich graczy do siebie'
+  Usage: '/teleportall'
+  Enabled: true
+  Item: 'END_ROD'
+  Field: 'o'
+  InPanel: true
+
+TeleportCommand:
+  Name: 'teleport'
+  Aliases:
+    - tp
+  Description: 'Teleportacja na serwerze'
+  Usage: '/teleport <nick/x> [nick/y] [z] [nick]'
+  Enabled: true
+  Item: 'END_PORTAL_FRAME'
+  Field: 'p'
+  InPanel: true
+
+TimeCommand:
+  Name: 'time'
+  Aliases: []
+  Description: 'Ustawianie czasu na serwerze'
+  Usage: '/time <czas> [świat/*]'
+  Enabled: true
+  Item: 'CLOCK'
+  Field: 'r'
+  InPanel: true
+
+UnBanCommand:
+  Name: 'unban'
+  Aliases: []
+  Description: 'Odblokowywanie gracza/ip na serwerze'
+  Usage: '/unban <nick/ip>'
+  Enabled: true
+  Item: 'WOODEN_AXE'
+  Field: 's'
+  InPanel: true
+
+UnMuteCommand:
+  Name: 'unmute'
+  Aliases: []
+  Description: 'Odciszanie gracza na serwerze'
+  Usage: '/unmute <nick>'
+  Enabled: true
+  Item: 'STRING'
+  Field: 't'
+  InPanel: true
+
+VanishCommand:
+  Name: 'vanish'
+  Aliases:
+    - v
+  Description: 'Zmiana trybu niewidzialności'
+  Usage: '/vanish [on/off] [nick]'
+  Enabled: true
+  Item: 'SPLASH_POTION'
+  Field: 'u'
+  InPanel: true
+
+WeatherCommand:
+  Name: 'weather'
+  Aliases: []
+  Description: 'Zmiana pogody na serwerze'
+  Usage: '/weather <pogoda> [świat/*]'
+  Enabled: true
+  Item: 'WATER_BUCKET'
+  Field: 'w'
+  InPanel: true
+
+ListCommand:
+  Name: 'list'
+  Aliases: []
+  Description: 'Lista graczy online na serwerze'
+  Usage: '/list'
+  Enabled: true
+  Item: 'PLAYER_HEAD'
+  Field: '1'
+  InPanel: true
+
+MessageCommand:
+  Name: 'message'
+  Aliases:
+    - msg
+  Description: 'Prywatne wiadomości'
+  Usage: '/message <nick> <wiadomość>'
+  Enabled: true
+  Item: 'FEATHER'
+  Field: '2'
+  InPanel: true
+
+ReplyCommand:
+  Name: 'reply'
+  Aliases:
+    - r
+  Description: 'Odpowiadanie ostatniemu piszącemu'
+  Usage: '/reply <wiadomość>'
+  Enabled: true
+  Item: 'STICK'
+  Field: '3'
+  InPanel: true
+
+ReportCommand:
+  Name: 'report'
+  Aliases:
+    - helpop
+  Description: 'Wysyłanie zgłoszenia administracji online'
+  Usage: '/report <wiadomość>'
+  Enabled: true
+  Item: 'BOW'
+  Field: '4'
+  InPanel: true
+
+HelpCommand:
+  Name: 'help'
+  Aliases:
+    - pomoc
+  Description: 'Pomoc serwerowa'
+  Usage: '/help'
+  Enabled: true
+  Item: 'ENCHANTED_BOOK'
+  Field: '5'
+  InPanel: true
+
+MessageToggleCommand:
+  Name: 'messagetoggle'
+  Aliases:
+    - msgtoggle
+  Description: 'Zmiana statusu przyjmowania wiadomości prywatnych'
+  Usage: '/msgtoggle [on/off] [nick]'
+  Enabled: true
+  Item: 'BARRIER'
+  Field: '6'
+  InPanel: true
+
+PanelCommand:
+  Name: 'panel'
+  Aliases:
+    - admin
+  Description: 'Panel poleceń'
+  Usage: '/panel'
+  Enabled: true
+  Item: 'COMMAND_BLOCK'
+  Field: '7'
+  InPanel: false

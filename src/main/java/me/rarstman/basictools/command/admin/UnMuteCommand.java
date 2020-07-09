@@ -1,58 +1,61 @@
 package me.rarstman.basictools.command.admin;
 
-import com.google.common.collect.ImmutableList;
-import me.rarstman.basictools.command.Command;
-import me.rarstman.basictools.configuration.Configuration;
+import me.rarstman.basictools.BasicToolsPlugin;
+import me.rarstman.basictools.configuration.BasicToolsCommands;
+import me.rarstman.basictools.configuration.BasicToolsMessages;
 import me.rarstman.basictools.data.User;
-import me.rarstman.basictools.util.ChatUtil;
-import org.bukkit.OfflinePlayer;
+import me.rarstman.basictools.data.UserManager;
+import me.rarstman.rarstapi.command.CommandProvider;
+import me.rarstman.rarstapi.configuration.ConfigManager;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UnMuteCommand extends Command {
+public class UnMuteCommand extends CommandProvider {
 
-    public UnMuteCommand(final Configuration.BasicCommand basicCommand) {
-        super(basicCommand, false);
+    private final BasicToolsMessages messages;
+    private final UserManager userManager;
+
+    public UnMuteCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).unMuteCommandData, "basictools.command.unmute", false);
+
+        this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
+        this.userManager = BasicToolsPlugin.getPlugin().getUserManager();
     }
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
         if (args.length < 1) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("BadUsage"), "{usage}", this.usageMessage);
+            this.rarstAPIMessages.badUsage.send(commandSender, "{USAGE}", this.usageMessage);
             return;
         }
         final User user1 = this.userManager.getUser(args[0]).isPresent() ? this.userManager.getUser(args[0]).get() : null;
 
         if (user1 == null) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("PlayerNotExist"));
+            this.rarstAPIMessages.playerNotExist.send(commandSender);
             return;
         }
 
         if (!user1.isMuted()) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NotMuted"));
+            this.messages.notMuted.send(commandSender);
             return;
         }
-        final OfflinePlayer offlinePlayer1 = user1.getOfflinePlayer();
+        user1.unMute();
 
-        if (offlinePlayer1.isOnline()) {
-            ChatUtil.sendMessage(offlinePlayer1.getPlayer(), this.messages.getMessage("UnMutedInfo"));
-        }
-        user1.setMuteDate(null);
-        user1.setMuteReason(null);
-        ChatUtil.sendMessage(commandSender, this.messages.getMessage("UnMuted"));
+        this.messages.unMuted.send(commandSender);
+        this.messages.unMutedInfo.send(user1.getOfflinePlayer());
     }
 
     @Override
-    public List<String> tabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
+    public List<String> onTabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
         switch (args.length) {
             case 1: {
-                return ImmutableList.of(
-                        this.userManager.getMutedUsers().stream().map(User::getName).collect(Collectors.joining())
-                );
+                return this.userManager.getMutedUsers().stream().map(User::getName).collect(Collectors.toList());
             }
         }
-        return ImmutableList.of();
+        return new ArrayList<>();
     }
+
 }

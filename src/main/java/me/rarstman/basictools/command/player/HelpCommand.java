@@ -1,31 +1,26 @@
-package me.rarstman.basictools.command.admin;
+package me.rarstman.basictools.command.player;
 
 import me.rarstman.basictools.configuration.BasicToolsCommands;
 import me.rarstman.basictools.configuration.BasicToolsMessages;
 import me.rarstman.rarstapi.command.CommandProvider;
 import me.rarstman.rarstapi.configuration.ConfigManager;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class BroadCastCommand extends CommandProvider {
+public class HelpCommand extends CommandProvider {
 
     private final BasicToolsMessages messages;
 
-    public BroadCastCommand() {
-        super(ConfigManager.getConfig(BasicToolsCommands.class).broadCastCommandData, "basictools.command.broadcast", false);
+    public HelpCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).helpCommandData, "basictools.command.help", false);
 
         this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
     }
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
-        if (args.length < 1) {
-            this.rarstAPIMessages.badUsage.send(commandSender, "{USAGE}", this.usageMessage);
-            return;
-        }
-        this.messages.broadCastFormat.broadCast("{MESSAGE}", StringUtils.join(args, " "));
+        this.messages.helpMessage.send(commandSender);
     }
 
     @Override

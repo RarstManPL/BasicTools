@@ -2,17 +2,18 @@ package me.rarstman.basictools.cache;
 
 public class ChatCache {
 
-    private boolean isEnabled;
+    private boolean enabled;
 
     public ChatCache() {
-        this.isEnabled = true;
+        this.enabled = true;
     }
 
     public boolean isEnabled() {
-        return this.isEnabled;
+        return this.enabled;
     }
 
-    public void setEnabled(final boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
     }
+
 }

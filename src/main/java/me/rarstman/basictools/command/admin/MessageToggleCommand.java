@@ -17,13 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VanishCommand extends CommandProvider {
+public class MessageToggleCommand extends CommandProvider {
 
     private final BasicToolsMessages messages;
     private final UserManager userManager;
 
-    public VanishCommand() {
-        super(ConfigManager.getConfig(BasicToolsCommands.class).vanishCommandData, "basictools.command.vanish", false);
+    public MessageToggleCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).messageToggleCommandData, "basictools.command.messagetoggle", true);
 
         this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
         this.userManager = BasicToolsPlugin.getPlugin().getUserManager();
@@ -49,18 +49,15 @@ public class VanishCommand extends CommandProvider {
             this.rarstAPIMessages.turnOptionNotExist.send(commandSender);
             return;
         }
-        final boolean isVanished = args.length > 0 ? BooleanUtil.stringStatusToBoolean(args[0]) : !userCache1.isVanished();
-        final String variableStatus = isVanished ? this.rarstAPIMessages.on_ : this.rarstAPIMessages.off_;
+        final boolean messageStatus = args.length > 0 ? BooleanUtil.stringStatusToBoolean(args[0]) : !userCache1.isBlockMessages();
+        final String variableStatus = messageStatus ? this.rarstAPIMessages.on_ : this.rarstAPIMessages.off_;
 
-        userCache1.setVanished(isVanished);
-        this.userManager.toggleVanishStatus(player1, isVanished);
-        this.messages.vanishStatusChanged.send(commandSender,
+        userCache1.setBlockMessages(messageStatus);
+        this.messages.blockMessagesStatusChanged.send(commandSender,
                 "{STATUS}", variableStatus,
                 "{NICK}", commandSender instanceof Player ? (Player) commandSender == player1 ? this.rarstAPIMessages.you : player1.getName() : player1.getName()
         );
-        this.messages.vanishStatusChangedInfo.send(player1,
-                "{STATUS}", variableStatus
-        );
+        this.messages.blockMessagesStatusChangedInfo.send(player1, "{STATUS}", variableStatus);
     }
 
     @Override

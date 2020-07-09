@@ -1,39 +1,53 @@
 package me.rarstman.basictools.command.admin;
 
-import com.google.common.collect.ImmutableList;
-import me.rarstman.basictools.command.Command;
-import me.rarstman.basictools.configuration.Configuration;
-import me.rarstman.basictools.util.ChatUtil;
+import me.rarstman.basictools.BasicToolsPlugin;
+import me.rarstman.basictools.configuration.BasicToolsCommands;
+import me.rarstman.basictools.configuration.BasicToolsMessages;
+import me.rarstman.basictools.data.UserManager;
+import me.rarstman.rarstapi.command.CommandProvider;
+import me.rarstman.rarstapi.configuration.ConfigManager;
+import me.rarstman.rarstapi.util.ColorUtil;
+import me.rarstman.rarstapi.util.PermissionUtil;
+import me.rarstman.rarstapi.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class KickCommand extends Command {
+public class KickCommand extends CommandProvider {
 
-    public KickCommand(final Configuration.BasicCommand basicCommand) {
-        super(basicCommand, false);
+    private final BasicToolsMessages messages;
+    private final UserManager userManager;
+
+    public KickCommand() {
+        super(ConfigManager.getConfig(BasicToolsCommands.class).kickCommandData, "basictools.command.kick", false);
+
+        this.messages = ConfigManager.getConfig(BasicToolsMessages.class);
+        this.userManager = BasicToolsPlugin.getPlugin().getUserManager();
     }
 
     @Override
     public void onExecute(final CommandSender commandSender, final String[] args) {
         if (args.length < 1) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("BadUsage"), "{usage}", this.usageMessage);
+            this.rarstAPIMessages.badUsage.send(commandSender, "{USAGE}", this.usageMessage);
             return;
         }
         final String permission = args[0].equalsIgnoreCase("*") ? this.permission + ".all" : null;
 
-        if (!this.vaultHook.hasPermission(commandSender, permission)) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("NoPermission"), "{permission}", permission);
+        if (!PermissionUtil.hasPermission(commandSender, permission)) {
+            this.rarstAPIMessages.noPermission.send(commandSender, "{PERMISSION}", permission);
             return;
         }
-        final String reason = args.length > 1 && !args[args.length - 1].equalsIgnoreCase("-s") ? StringUtils.join(args, " ", 1, args.length) : this.messages.getMessage("DefaultKickReason");
-        final String kickFormat = ChatUtil.fixColors(ChatUtil.replace(this.messages.getMessage("KickFormat"),
-                "{reason}", reason,
-                "{kicker}", commandSender.getName()
+        final String reason = args.length > 1 + (args[args.length - 1].equalsIgnoreCase("-s") ? 1 : 0) ? StringUtils.join(args, " ", 1, args.length - (args[args.length - 1].equalsIgnoreCase("-s") ? 1 : 0)) : this.messages.defaultKickReason;
+        final String kickFormat = ColorUtil.color(StringUtil.replace(this.messages.kickFormat,
+                "{REASON}", reason,
+                "{KICKER}", commandSender.getName()
         ));
         final boolean isSilient = args[args.length - 1].equalsIgnoreCase("-s");
 
@@ -41,42 +55,57 @@ public class KickCommand extends Command {
             Bukkit.getOnlinePlayers()
                     .stream()
                     .filter(player1 -> commandSender != player1)
-                    .forEach(player1 -> player1.kickPlayer(kickFormat));
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("KickedAll"), "{reason}", reason);
+                    .forEach(player1 -> player1.kickPlayer(ChatColor.RESET + kickFormat));
+            this.messages.kickedAll.send(commandSender, "{REASON}", reason);
+
             if(!isSilient) {
-                ChatUtil.broadCastMessage(this.messages.getMessage("KickedAllBroadCastInfo"), "{reason}", reason);
+                this.messages.kickedAllBroadCastInfo.broadCast(
+                        "{REASON}", reason,
+                        "{KICKER}", commandSender.getName()
+                );
             }
             return;
         }
-        final Player player1 = !(commandSender instanceof Player) && args.length < 1 ? null : args.length > 0 ? this.userManager.getUser(args[0]).isPresent() ? this.userManager.getUser(args[0]).get().getOfflinePlayer().isOnline() ? this.userManager.getUser(args[0]).get().getPlayer() : null : null : (Player) commandSender;
+        final Player player1 = this.userManager.getUser(args[0]).isPresent() ? this.userManager.getUser(args[0]).get().getPlayer() : null;
 
-        if (player1 == null) {
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("PlayerNotExistOrConsole"));
+        if (player1 == null || !this.userManager.canInteractPlayer(commandSender, player1)) {
+            this.rarstAPIMessages.playerNotExistOrConsole.send(commandSender);
             return;
         }
 
-        if (this.vaultHook.hasPermission(player1, this.permission + ".bypass")){
-            ChatUtil.sendMessage(commandSender, this.messages.getMessage("BypassPermission"));
+        if (PermissionUtil.hasPermission(player1, this.permission + ".bypass")){
+            this.messages.bypassPermission.send(commandSender);
             return;
         }
-        player1.kickPlayer(kickFormat);
-        ChatUtil.sendMessage(commandSender, this.messages.getMessage("Kicked"), "{reason}", reason);
+
+        player1.kickPlayer(ChatColor.RESET + kickFormat);
+        this.messages.kicked.send(commandSender,
+                "{REASON}", reason,
+                "{KICKED}", player1.getName());
+
         if(!isSilient){
-            ChatUtil.broadCastMessage(this.messages.getMessage("KickedBroadCastInfo"),
-                    "{kicked}", player1.getName(),
-                    "{kicker}", commandSender.getName(),
-                    "{reason}", reason
+            this.messages.kickedBroadCastInfo.broadCast(
+                    "{KICKED}", player1.getName(),
+                    "{KICKER}", commandSender.getName(),
+                    "{REASON}", reason
             );
         }
     }
 
     @Override
-    public List<String> tabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
+    public List<String> onTabComplete(final CommandSender commandSender, final String alias, final String[] args) throws IllegalArgumentException {
         switch (args.length) {
+            case 0: {
+                break;
+            }
             case 1: {
-                return ImmutableList.of(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.joining()), this.vaultHook.hasPermission(commandSender, this.permission + ".all") ? "*" : null);
+                return this.userManager.playersThatCanInteract(commandSender).stream().filter(player -> !PermissionUtil.hasPermission(player, this.permission + ".bypass")).map(Player::getName).collect(Collectors.toList());
+            }
+            default: {
+                return Arrays.asList("-s");
             }
         }
-        return ImmutableList.of();
+        return new ArrayList<>();
     }
+
 }
