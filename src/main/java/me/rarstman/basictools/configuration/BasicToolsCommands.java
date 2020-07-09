@@ -213,6 +213,10 @@ public class BasicToolsCommands extends ConfigProvider {
     @ParseValue(CommandIconParser.class)
     public CommandIcon panelCommandIcon = new CommandIcon(Material.COMMAND_BLOCK, "7", false);
 
+    @ConfigName("BasicToolsCommand")
+    @ParseValue(CommandDataParser.class)
+    public CommandData basicToolsCommandData = new CommandData("basictools", Arrays.asList("bt"), "Przeładowuje konfiguracje", "/basictools", true);
+
     public BasicToolsCommands() {
         super(new File(BasicToolsPlugin.getPlugin().getDataFolder(), "commands.yml"), BasicToolsPlugin.getPlugin().getResource("commands.yml"));
     }

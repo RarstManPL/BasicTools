@@ -294,3 +294,11 @@ PanelCommand:
   Item: 'COMMAND_BLOCK'
   Field: '7'
   InPanel: false
+
+BasicToolsCommand:
+  Name: 'basictools'
+  Aliases:
+    - bt
+  Description: 'Przeładowuje konfiguracje'
+  Usage: '/basictools'
+  Enabled: true

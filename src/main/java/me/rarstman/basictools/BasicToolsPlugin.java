@@ -44,28 +44,7 @@ public class BasicToolsPlugin extends JavaPlugin {
         );
 
         this.basicToolsLogger.info("Registering database...");
-        try {
-            this.databaseProvider = new MySQL(ConfigManager.getConfig(BasicToolsConfig.class).mySQLDatabaseData)
-                    .createTable(
-                            new StringBuilder()
-                                    .append("CREATE TABLE IF NOT EXISTS `basictools_users` (")
-                                    .append("`id` INTEGER PRIMARY KEY AUTO_INCREMENT, ")
-                                    .append("`uuid` VARCHAR(255) NOT NULL, ")
-                                    .append("`name` TEXT NOT NULL, ")
-                                    .append("`firstIP` TEXT NOT NULL, ")
-                                    .append("`lastIP` TEXT NOT NULL, ")
-                                    .append("`firstPlay` LONG NOT NULL, ")
-                                    .append("`lastPlay` LONG NOT NULL, ")
-                                    .append("`muteDate` LONG NOT NULL, ")
-                                    .append("`muteReason` TEXT NOT NULL);")
-                                    .toString()
-                    )
-                    .initialize();
-        } catch (final DatabaseInitializeException exception) {
-            this.basicToolsLogger.error(exception.getMessage());
-            this.getPluginLoader().disablePlugin(this);
-            return;
-        }
+        this.registerDatabase();
 
         this.userManager = new UserManager();
         this.userManager.loadUsers();
@@ -126,6 +105,31 @@ public class BasicToolsPlugin extends JavaPlugin {
     public void onDisable() {
         this.userManager.saveUsers();
         this.databaseProvider.disableDatabase();
+    }
+
+    public void registerDatabase() {
+        try {
+            this.databaseProvider = new MySQL(ConfigManager.getConfig(BasicToolsConfig.class).mySQLDatabaseData)
+                    .createTable(
+                            new StringBuilder()
+                                    .append("CREATE TABLE IF NOT EXISTS `basictools_users` (")
+                                    .append("`id` INTEGER PRIMARY KEY AUTO_INCREMENT, ")
+                                    .append("`uuid` VARCHAR(255) NOT NULL, ")
+                                    .append("`name` TEXT NOT NULL, ")
+                                    .append("`firstIP` TEXT NOT NULL, ")
+                                    .append("`lastIP` TEXT NOT NULL, ")
+                                    .append("`firstPlay` LONG NOT NULL, ")
+                                    .append("`lastPlay` LONG NOT NULL, ")
+                                    .append("`muteDate` LONG NOT NULL, ")
+                                    .append("`muteReason` TEXT NOT NULL);")
+                                    .toString()
+                    )
+                    .initialize();
+        } catch (final DatabaseInitializeException exception) {
+            this.basicToolsLogger.error(exception.getMessage());
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
     }
 
     public UserManager getUserManager() {

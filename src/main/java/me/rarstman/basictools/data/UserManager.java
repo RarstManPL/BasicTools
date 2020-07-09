@@ -2,6 +2,7 @@ package me.rarstman.basictools.data;
 
 import me.rarstman.basictools.BasicToolsPlugin;
 import me.rarstman.basictools.command.CommandIcon;
+import me.rarstman.basictools.command.plugin.BasicToolsCommand;
 import me.rarstman.basictools.configuration.BasicToolsCommands;
 import me.rarstman.basictools.configuration.BasicToolsConfig;
 import me.rarstman.basictools.configuration.BasicToolsMessages;
@@ -347,7 +348,10 @@ public class UserManager {
 
             @Override
             public void onExecute() {
-                final Set<CommandProvider> commandsSet = CommandManager.getCommandsByJavaPlugin(BasicToolsPlugin.getPlugin());
+                final Set<CommandProvider> commandsSet = CommandManager.getCommandsByJavaPlugin(BasicToolsPlugin.getPlugin())
+                        .stream()
+                        .filter(command -> command.getClass() != BasicToolsCommand.class)
+                        .collect(Collectors.toSet());
                 final Rows rows = Rows.getByColumns(config.panelInventoryTemplate.size()).isPresent() ? Rows.getByColumns(config.panelInventoryTemplate.size()).get() : Rows.SIX;
                 final InventoryProvider panelInventory = new ChestInventory(rows)
                         .setTitle(config.panelInventoryTitle)
